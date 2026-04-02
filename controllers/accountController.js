@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import md5 from "md5";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import request from "request";
+// import request from "request";
 import e from "express";
 import axios from "axios"
 require("dotenv").config();
@@ -276,30 +276,30 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-const verifyCodeforregister = async (req, res) => {
-  let phone = req.body.phone;
-  let now = new Date().getTime();
-  let timeEnd = +new Date() + 1000 * (60 * 2 + 0) + 500;
-  let otp = randomNumber(100000, 999999);
-  request(
-    `https://www.fast2sms.com/dev/bulkV2?authorization=yj8Xb5LDd3W1z6pvYA7PCFKusahoJTNIrqfE90ROMGtmkVeQx4CNp9FHujnxZVWwBg2vL6KeUMyksqXI&route=otp&variables_values=${otp}&flash=0&numbers=${phone}`,
-    async (error, response, body) => {
-      let data = JSON.parse(response.body);
-      if (data.return) {
-        await connection.execute(
-          "UPDATE users SET otp = ?, time_otp = ? WHERE phone = ? ",
-          [otp, timeEnd, phone]
-        );
-        return res.status(200).json({
-          message: "OTP Send Successfully",
-          status: true,
-          timeStamp: timeNow,
-          timeEnd: timeEnd,
-        });
-      }
-    }
-  );
-};
+// const verifyCodeforregister = async (req, res) => {
+//   let phone = req.body.phone;
+//   let now = new Date().getTime();
+//   let timeEnd = +new Date() + 1000 * (60 * 2 + 0) + 500;
+//   let otp = randomNumber(100000, 999999);
+//   request(
+//     `https://www.fast2sms.com/dev/bulkV2?authorization=yj8Xb5LDd3W1z6pvYA7PCFKusahoJTNIrqfE90ROMGtmkVeQx4CNp9FHujnxZVWwBg2vL6KeUMyksqXI&route=otp&variables_values=${otp}&flash=0&numbers=${phone}`,
+//     async (error, response, body) => {
+//       let data = JSON.parse(response.body);
+//       if (data.return) {
+//         await connection.execute(
+//           "UPDATE users SET otp = ?, time_otp = ? WHERE phone = ? ",
+//           [otp, timeEnd, phone]
+//         );
+//         return res.status(200).json({
+//           message: "OTP Send Successfully",
+//           status: true,
+//           timeStamp: timeNow,
+//           timeEnd: timeEnd,
+//         });
+//       }
+//     }
+//   );
+// };
 
 
 
@@ -1158,7 +1158,7 @@ module.exports = {
   verifyCodePass,
   forGotPassword,
   keFuMenu,
-  verifyCodeforregister,
+  // verifyCodeforregister,
   getLoginDetail,
   deleteLoginDetail,
   sendOTPOnEmail,

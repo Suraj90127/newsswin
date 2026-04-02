@@ -215,7 +215,7 @@ const initWebRouter = (app) => {
   router.post("/api/resetPasword", accountController.forGotPassword);
 
   // router.get('/salery_send', homeController.salerySend);
-  router.post("/api/sent/otp/verify1", accountController.verifyCodeforregister);
+  // router.post("/api/sent/otp/verify1", accountController.verifyCodeforregister);
   router.post("/api/addutr", userController.addutr);
 
   router.get("/aviator", userController.aviator);
