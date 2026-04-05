@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-const img1 = "https://i.ibb.co/k6WGVRwP/Whats-App-Image-2026-03-09-at-3-56-06-AM.jpg";
+const img1 = "https://i.ibb.co/9HBPVJfR/Gemini-Generated-Image-enzw4venzw4venzw.png";
 
 const MainLoader = () => {
   const { bannergetData } = useSelector((state) => state.user);
