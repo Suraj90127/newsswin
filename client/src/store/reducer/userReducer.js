@@ -192,6 +192,25 @@ export const zilpayRecharge = createAsyncThunk(
     }
   }
 );
+
+export const TrexoPayment = createAsyncThunk(
+  "auth/TrexoPayment",
+  async ({ amount, type,channel }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(
+        "/webapi/initiateTrexoPayPayment",
+        { amount: amount, type: type, channel  },
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const p2p = createAsyncThunk(
   "auth/p2p",
   async ({money,userId}, { rejectWithValue, fulfillWithValue }) => {
@@ -471,10 +490,22 @@ export const userReducer = createSlice({
      state.successMessage = payload.message;
         state.loader = false;
       })
+      .addCase(TrexoPayment.pending, (state) => {
+      state.loader = true;
+      })
+      .addCase(TrexoPayment.rejected, (state, { payload }) => {
+        // console.log('register rejected payload:', payload); // Log payload
+        state.errorMessage = payload?.errorMessage || "An error occurred";
+        state.loader = false;
+      })
+      .addCase(TrexoPayment.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+        state.loader = false;
+      })
       .addCase(p2p.pending, (state) => {
         state.p2ploader = true;
       })
-       .addCase(p2p.fulfilled, (state, { payload }) => {
+      .addCase(p2p.fulfilled, (state, { payload }) => {
      state.successMessage = payload.message;
         state.p2ploader = false;
       })

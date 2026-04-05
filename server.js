@@ -34,10 +34,10 @@ const server = http.createServer(app);
 const logFilePath = path.join(__dirname, "server.log");
 
 const corsdata = [
-  "https://universals.pro",
+  "https://sswin90.com",
   "/",
   "http://localhost:3000",
-  "https://bot.universals.pro",
+  "https://bot.sswin90.com",
   "https://h5.workorder.support.sswin90.com/",
   "http://localhost:5173"
 ];
@@ -945,7 +945,7 @@ async function startCountdown_1(requestData) {
                 // console.log("🔄 New period_id:", period_id, "| New issueNumber_trx:", issueNumber_trx);
               } catch (error) {
                 console.error("❌ Failed to fetch new period:", error.message);
-              }
+          }
         }
 
         // 🎯 Emit results on countdown = 1

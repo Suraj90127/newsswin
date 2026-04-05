@@ -932,16 +932,25 @@ router.get("/api/webapi/vipLevelMonthlycron", async (req,res)=>{
   
     router.post(
   "/api/webapi/zilpayCallback",
-
   userController.zilpayCallback
 );
-
-
-  
    router.post(
     "/api/webapi/zilpay",
  middlewareController,
     userController.zilpay
+  );
+
+    router.post(
+  "/api/webapi/initiateTrexoPayPayment",
+  middlewareController,
+    userController.initiateTrexoPayPayment
+  );
+ 
+  
+   router.post(
+    "/api/webapi/verifyTrexoPayPayment",
+ upload.none(),
+    userController.verifyTrexoPayPayment
   );
   
   

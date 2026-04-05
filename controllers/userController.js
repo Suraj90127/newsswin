@@ -7,7 +7,8 @@ const moment = require("moment-timezone");
 import fs from "fs";
 import util from "util";
 import path from "path";
-import { log } from "console";
+import crypto from "crypto"
+import querystring from "querystring";
 
 const logsDirectory = path.join(path.resolve(), "logs");
 if (!fs.existsSync(logsDirectory)) {
@@ -15,7 +16,7 @@ if (!fs.existsSync(logsDirectory)) {
 }
 
 const apiUrl = "https://api-docs.space/api";
-const key = "JDFu4VFqXNi9L9H4lzCo";
+const key = "P18eCa60SONhiAazrFHG";
 
 // Define the path for the log file in the logs directorycons
 const logFilePath = path.join(logsDirectory, "performance_log.txt");
@@ -433,7 +434,7 @@ const checkInHandling = async (req, res) => {
     const formattedDate = `${year}-${month}-${day}`;
 
     if (data && formattedDate !== point_listss[0].today) {
-        
+
       if (data == 1) {
         const [point_lists] = await connection.query(
           "SELECT * FROM point_list WHERE `phone` = ? ",
@@ -847,7 +848,7 @@ const rebateCreate = async (req, res) => {
         rows[0].phone,
         amount,
         rows[0].rebetRet,
-        Number(amount * rows[0].rebetRet)/100,
+        Number(amount * rows[0].rebetRet) / 100,
         "Slotes",
         1,
         sumdate,
@@ -856,20 +857,20 @@ const rebateCreate = async (req, res) => {
 
     await connection.execute(
       "UPDATE `users` SET `money` = `money` + ?,`rebate`=`rebate`-? WHERE `token` = ? ",
-      [Number(amount * rows[0].rebetRet)/100, amount, auth]
+      [Number(amount * rows[0].rebetRet) / 100, amount, auth]
     );
 
 
-   const datasql =
-            "INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, `time` = ?";
-          await connection.query(datasql, [
-            rows[0].phone,
-            "Rebate bonus",
-            Number(amount * rows[0].rebetRet)/100,
-            sumdate,
-          ]);
-          
-          
+    const datasql =
+      "INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, `time` = ?";
+    await connection.query(datasql, [
+      rows[0].phone,
+      "Rebate bonus",
+      Number(amount * rows[0].rebetRet) / 100,
+      sumdate,
+    ]);
+
+
     return res.status(200).json({
       message: `You just received successful`,
       status: true,
@@ -1443,7 +1444,7 @@ const transactionHistory = async (req, res) => {
 //     // Query for yesterday's balance
 //     const yesterday = new Date();
 //     const formattedDate = yesterday.toISOString().split("T")[0];
-    
+
 //     const [datas] = await connection.execute(
 //       `SELECT id, phone, detail, balance, type, time 
 //        FROM transaction_history 
@@ -1452,7 +1453,7 @@ const transactionHistory = async (req, res) => {
 //        AND DATE(time) = ?`,
 //       [user[0].phone, formattedDate]
 //     );
-    
+
 //     const yesterdayBalance = datas.length > 0 ? parseFloat(datas[0].balance || 0) : 0;
 
 
@@ -1526,7 +1527,7 @@ const transactionHistory = async (req, res) => {
 //     }
 
 //     const commissions = downlineRecharges.map((u) => {
-     
+
 //       const commission = u.totalBetAmount * (commissionRates[u.level] || 0);
 //       return {
 //         commission: commission.toFixed(2),
@@ -1594,7 +1595,7 @@ const totalCommission = async (req, res) => {
     const yDate = yesterday.toISOString().split("T")[0];
 
     console.log("yDate", yDate);
-    
+
 
     // 🔹 week balance
     const weekStart = new Date();
@@ -1637,16 +1638,16 @@ const totalCommission = async (req, res) => {
       );
 
       console.log("recharges", recharges);
-      
+
       const [levels] = await connection.query("SELECT f1 FROM level");
 
       const rates = {
-      1: levels[0]?.f1 / 100 || 0,
-      2: levels[1]?.f1 / 100 || 0,
-      3: levels[2]?.f1 / 100 || 0,
-      4: levels[3]?.f1 / 100 || 0,
-      5: levels[4]?.f1 / 100 || 0,
-      6: levels[5]?.f1 / 100 || 0,
+        1: levels[0]?.f1 / 100 || 0,
+        2: levels[1]?.f1 / 100 || 0,
+        3: levels[2]?.f1 / 100 || 0,
+        4: levels[3]?.f1 / 100 || 0,
+        5: levels[4]?.f1 / 100 || 0,
+        6: levels[5]?.f1 / 100 || 0,
       };
 
       const userLevelMap = Object.fromEntries(
@@ -1886,7 +1887,7 @@ const recharge = async (req, res) => {
             
             `;
       await connection.execute(sql, [
-          
+
         client_transaction_id,
         "0",
         userInfo.phone,
@@ -1925,24 +1926,24 @@ const recharge = async (req, res) => {
         "SELECT * FROM recharge WHERE utr = ? ",
         [utr]
       );
-      
-       const [utrcheck] = await connection.query(
+
+      const [utrcheck] = await connection.query(
         "SELECT * FROM recharge WHERE id_order = ? ",
         [typeid]
       );
-      
-      
-    //   console.log(utrcheck,utrcount.length === 0)
-      
-      if(utrcheck[0].utr !== null){
-             return res.status(200).json({
+
+
+      //   console.log(utrcheck,utrcount.length === 0)
+
+      if (utrcheck[0].utr !== null) {
+        return res.status(200).json({
           message: "Already submited",
           status: false,
         });
       }
-      
-      
-      
+
+
+
       if (utrcount.length === 0) {
         await connection.query(
           "UPDATE recharge SET utr = ?, userStatus=1 WHERE phone = ? AND id_order = ? AND status = ? ",
@@ -1996,7 +1997,7 @@ const recharge = async (req, res) => {
         
         `;
     await connection.execute(sql, [
-        userInfo.id_user,
+      userInfo.id_user,
       client_transaction_id,
       "0",
       userInfo.phone,
@@ -2607,7 +2608,7 @@ const addUSDT = async (req, res) => {
 };
 
 const addUpi = async (req, res) => {
-//   console.log("addUpi called",req.body);
+  //   console.log("addUpi called",req.body);
   try {
     let auth = req.cookies.auth;
     let upiName = req.body.name_user
@@ -2615,7 +2616,7 @@ const addUpi = async (req, res) => {
     let remarkType = req.body.type || "upi";
     let upi = req.body.upi;
 
-    
+
 
     let time = timerJoin2(Date.now());
 
@@ -2626,7 +2627,7 @@ const addUpi = async (req, res) => {
         timeStamp: timeNow,
       });
     }
-    
+
     const [user] = await connection.query(
       "SELECT `phone`, `code`,`invite` FROM users WHERE `token` = ? ",
       [auth]
@@ -2634,7 +2635,7 @@ const addUpi = async (req, res) => {
     let userInfo = user[0];
 
 
-    
+
     if (!user) {
       return res.status(200).json({
         message: "Invalid user",
@@ -2651,13 +2652,13 @@ const addUpi = async (req, res) => {
     // console.log("user_bank2",user_bank2);
 
     // console.log("upiId.length",upiId.length);
-    
-    
 
-      console.log("wertyuii",userInfo);
+
+
+    console.log("wertyuii", userInfo);
 
     if (user_bank2.length == 0) {
-      
+
       const sql = `INSERT INTO user_bank SET 
         phone = ?,
         name_bank = ?,
@@ -2684,14 +2685,14 @@ const addUpi = async (req, res) => {
         time,
       ]);
 
-        
+
 
       return res.status(200).json({
         message: "Successfully added UPI Id",
         status: true,
         timeStamp: timeNow,
       });
-   
+
     } else if (user_bank2.length > 0) {
       await connection.query(
         "UPDATE user_bank SET name_user = ?, upi =?, remarkType=? WHERE phone = ?",
@@ -2885,7 +2886,7 @@ const withdrawal3 = async (req, res) => {
         timeStamp: timeNow,
       });
     }
-    
+
     let userInfo = user[0];
 
     if (userInfo.enableWithdraw === 1) {
@@ -2957,14 +2958,14 @@ const withdrawal3 = async (req, res) => {
         status: false,
       });
     }
-    
-    const userMoney=parseFloat(userInfo.money)
-    const userAmount=parseFloat(money)
-    if(userMoney < userAmount){
-         return res.status(200).json({
-            message: "Insufficient Fund",
-            status: false,
-          }); 
+
+    const userMoney = parseFloat(userInfo.money)
+    const userAmount = parseFloat(money)
+    if (userMoney < userAmount) {
+      return res.status(200).json({
+        message: "Insufficient Fund",
+        status: false,
+      });
     }
 
     if (userInfo.isdemo == 1) {
@@ -3015,13 +3016,13 @@ const withdrawal3 = async (req, res) => {
     }
 
 
- if (type === "P2P Wallet") {
-    if (userInfo.money - money >= 0) {
-    if (needbet == 0) {
-      let infoBank = user_bank[0];
-      
+    if (type === "P2P Wallet") {
+      if (userInfo.money - money >= 0) {
+        if (needbet == 0) {
+          let infoBank = user_bank[0];
 
-      const sql = `INSERT INTO withdraw SET 
+
+          const sql = `INSERT INTO withdraw SET 
                             id_order = ?,
                             phone = ?,
                             money = ?,
@@ -3036,49 +3037,49 @@ const withdrawal3 = async (req, res) => {
                             today = ?,
                             time = ?
                           `;
-      await connection.execute(sql, [
-        id_time + "" + id_order,
-        userInfo.phone,
-        money,
-        "p2p",
-        "p2p",
-        type,
-        "p2p",
-        "p2p",
-        "p2p",
-        "p2p",
-          0,
-        checkTime,
-        dates,
-        
-      ]);
+          await connection.execute(sql, [
+            id_time + "" + id_order,
+            userInfo.phone,
+            money,
+            "p2p",
+            "p2p",
+            type,
+            "p2p",
+            "p2p",
+            "p2p",
+            "p2p",
+            0,
+            checkTime,
+            dates,
 
-      await connection.execute(
-        "UPDATE users SET money = money - ? WHERE phone = ? ",
-        [money, userInfo.phone]
-      );
-      return res.status(200).json({
-        message: "Withdrawal successful",
-        status: true,
-        money: userInfo.money - money,
-        timeStamp: timeNow,
-      });
-    } else {
-      return res.status(200).json({
-       message: "The total bet is not enough to fulfill the request",
-      status: false,
-      result: result,
-      timeStamp: timeNow,
-      });
+          ]);
+
+          await connection.execute(
+            "UPDATE users SET money = money - ? WHERE phone = ? ",
+            [money, userInfo.phone]
+          );
+          return res.status(200).json({
+            message: "Withdrawal successful",
+            status: true,
+            money: userInfo.money - money,
+            timeStamp: timeNow,
+          });
+        } else {
+          return res.status(200).json({
+            message: "The total bet is not enough to fulfill the request",
+            status: false,
+            result: result,
+            timeStamp: timeNow,
+          });
+        }
+      } else {
+        return res.status(200).json({
+          message: "The balance is not enough to fulfill the request",
+          status: false,
+          timeStamp: timeNow,
+        });
+      }
     }
-  }else {
-     return res.status(200).json({
-     message: "The balance is not enough to fulfill the request",
-      status: false,
-     timeStamp: timeNow,
-  });
-  }
- }
 
 
 
@@ -3107,7 +3108,7 @@ const withdrawal3 = async (req, res) => {
                             verify=?
                             `;
             await connection.execute(sql, [
-                userInfo.id_user,
+              userInfo.id_user,
               id_time + "" + id_order,
               userInfo.phone,
               money,
@@ -3514,7 +3515,7 @@ const listRecharge2 = async (req, res) => {
     // );
     return res.status(200).json({
       message: "Receive success",
-    //   data2: recharge2,
+      //   data2: recharge2,
       status: true,
       timeStamp: timeNow,
     });
@@ -4334,7 +4335,7 @@ const vipLevel = async (req, res) => {
 const vipLevelEvery = async (req, res) => {
   try {
 
-   
+
 
     // Fetch data from tables
     const [minutesData] = await connection.execute(
@@ -4673,8 +4674,8 @@ const vipLevelSingle = async (req, res) => {
 
     const totalAmount = m1.total + k3.total + d5.total;
 
-    console.log("totalAmount",totalAmount);
-    
+    console.log("totalAmount", totalAmount);
+
 
     const [vipdata] = await connection.execute(
       "SELECT * FROM vip_data ORDER BY id ASC"
@@ -4789,25 +4790,25 @@ const vipLevelMonthly = async (req, res) => {
           "INSERT INTO vip_record SET phone=?, amount=?, level=?, type=?, date=?",
           [userInfo.phone, bonusAmount, level, "Month", sumdate]
         );
-        
-         await connection.query(
-              "INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, time = ?",
-              [userInfo.phone, "vip monthly bonus", bonusAmount, sumdate]
-            );
-            
-            
+
+        await connection.query(
+          "INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, time = ?",
+          [userInfo.phone, "vip monthly bonus", bonusAmount, sumdate]
+        );
+
+
       }
     }
 
     return res.status(200).json({
       success: true,
-      message: "VIP monthly bonuses processed successfully." 
+      message: "VIP monthly bonuses processed successfully."
     });
 
     res.send({ message: "VIP monthly bonuses processed successfully." });
   } catch (err) {
     console.error("Error processing VIP bonuses:", err);
-     return res.status(500).json({
+    return res.status(500).json({
       message: "internal server error",
       success: false,
       timeStamp: timeNow,
@@ -5867,7 +5868,7 @@ const userProblemGet = async (req, res) => {
       success: true,
       data: datas[0],
     });
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const adminProblemGet = async (req, res) => {
@@ -5899,7 +5900,7 @@ const adminProblemGet = async (req, res) => {
       success: true,
       data: datas[0],
     });
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const adminProblemSubmit = async (req, res) => {
@@ -5944,7 +5945,7 @@ const adminProblemSubmit = async (req, res) => {
         success: true,
       });
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const getpromotiondata = async (req, res) => {
@@ -6701,9 +6702,9 @@ const promotionNew = async (req, res) => {
     // Format the date as YYYY-MM-DD
     const currentDate = previousDate.toISOString().slice(0, 10);
 
-    console.log("currentDate",currentDate);
+    console.log("currentDate", currentDate);
     // console.log("userInfo.phone",userInfo.phone);
-    
+
 
     // Query to select today's deposits for each user
     const [promotion_data] = await connection.query(
@@ -6713,9 +6714,9 @@ const promotionNew = async (req, res) => {
 
     const data = promotion_data[0] || {};
 
-    console.log("data",data);
-    console.log("data.direct_register",data.direct_register);
-    
+    console.log("data", data);
+    console.log("data.direct_register", data.direct_register);
+
 
     return res.status(200).json({
       message: "Receive success",
@@ -6754,7 +6755,7 @@ const promotionNew = async (req, res) => {
 // const fetchPromotionDataUser = async (req, res) => {
 //   const { date } = req.body;
 //   console.log("date",date);
-  
+
 //   const auth = req.cookies.auth;
 
 //   if (!auth) {
@@ -6803,7 +6804,7 @@ const promotionNew = async (req, res) => {
 //     const userIds = downlineUserData.map((u) => u.userId);
 
 //     console.log("userIds",userIds);
-    
+
 
 //     if (!userIds.length) {
 //       return res.status(404).json({
@@ -6825,7 +6826,7 @@ const promotionNew = async (req, res) => {
 //     );
 
 //     // console.log("downlineRecharges", downlineRecharges);
-    
+
 
 //     const [level] = await connection.query("SELECT * FROM level");
 
@@ -7187,8 +7188,8 @@ const zilpay = async (req, res) => {
     const params = {
       amount: Number(money),
       auth: "YUTMH4E1YAJQWIA5J92T",
-      callback: "https://universals.pro/api/webapi/zilpayCallback",
-      redirect_url: "https://universals.pro",
+      callback: "https://sswin90.com/api/webapi/zilpayCallback",
+      redirect_url: "https://sswin90.com",
       user: userInfo.phone,
     };
 
@@ -7209,7 +7210,7 @@ const zilpay = async (req, res) => {
   userStatus=?
         `;
       await connection.execute(sql, [
-          userInfo.id_user,
+        userInfo.id_user,
         data.data.order_id,
         data.data.order_id,
         userInfo.phone,
@@ -7382,6 +7383,228 @@ const zilpayCallback = async (req, res) => {
 };
 
 
+const initiateTrexoPayPayment = async (req, res) => {
+  try {
+    const auth = req.cookies.auth;
+    const am = Number(req.body.amount);
+    const type = req.body.type;
+    const business_code = req.body.channel; // ye ab business_code hoga
+
+    console.log("channel", business_code);
+
+
+    if (!auth || !am) {
+      return res.status(400).json({
+        message: "Minimum recharge 100",
+        status: false,
+      });
+    }
+
+    // ✅ USER FETCH
+    const [user] = await connection.query(
+      "SELECT `phone`, `id_user` FROM users WHERE `token` = ?",
+      [auth]
+    );
+
+    if (!user || user.length === 0) {
+      return res.status(400).json({
+        message: "User not found",
+        status: false,
+      });
+    }
+
+    const userInfo = user[0];
+      let checkTime = timerJoin2(Date.now());
+
+      // console.log("userInfo", userInfo);
+      
+
+    // ✅ AMOUNT FIX
+    let realAmount = Number(
+      (type === "USDT" ? am * 93 : am).toFixed(2)
+    );
+
+    // 🔐 TREXOPAY KEYS
+    const mch_private_key = "41510ff6785c19dc729fd52f32199dea";
+    const mch_public_key = "ebe614c0620b16061cd11065f22cca76";
+
+    const orderId = "ORD_" + Date.now();
+    const timestamp = Math.floor(Date.now() / 1000);
+    const amountStr = am.toFixed(2);
+
+    const notify_url = "https://sswin90.com/api/webapi/verifyTrexoPayPayment";
+
+    // ✅ SIGN STRING
+    const sign_string = [
+      mch_private_key,
+      orderId,
+      amountStr,
+      business_code, // business_code
+      timestamp,
+    ].join("|");
+
+    const sign = crypto
+      .createHmac("sha256", mch_public_key)
+      .update(sign_string)
+      .digest("hex");
+
+    const payload = {
+      mch_private_key,
+      mch_public_key,
+      orderNo: orderId,
+      business_code,
+      amount: amountStr,   // ✅ string
+      timestamp,
+      sign,
+      notifyUrl: notify_url,
+      phone: userInfo.phone,
+    };
+    const response = await axios.post(
+      "https://api.trexopay.cc/orderPay",
+      querystring.stringify(payload),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const data = response.data;
+    if (data.status === true) {
+
+      // ✅ DB SAVE
+      await connection.execute(
+        `INSERT INTO recharge 
+          SET userId=?, id_order=?, transaction_id=?, phone=?, money=?, type=?, status=?, today = ?, url = ?, time = ?, userStatus=?`,
+        [
+          userInfo.id_user,
+          orderId,
+          data.result.systemOrderId,
+          userInfo.phone,
+          realAmount,
+          type,
+          0,
+          checkTime,
+          data.result.payment_url,
+          checkTime,
+          0,
+        ]
+      );
+
+      return res.json({
+        status: true,
+        payment_url: data.result.payment_url,
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: data.message,
+      });
+    }
+  } catch (error) {
+    console.log("ERROR:", error.response?.data || error.message);
+
+    return res.status(500).json({
+      status: false,
+      message: error.message,
+      trexopayError: error.response?.data || null,
+    });
+  }
+};
+
+const verifyTrexoPayPayment = async (req, res) => {
+  const rawPostData = req.body;
+  let { status, order_id, customer_mobile, amount } = rawPostData;
+  console.log("verifyTrexoPayPayment - rawPostData:", rawPostData);
+  // order_id="2025080182704184500608"
+  try {
+    const [info] = await connection.query('SELECT * FROM recharge WHERE id_order = ?', [order_id]);
+
+    if (info.length > 0) {
+      if (info[0].status === 1) {
+        console.log('Recharge status is already completed. Skipping user money update.');
+      } else {
+
+
+        const checkTime = timerJoin2(Date.now())
+        const [Firstrecharge] = await connection.query('SELECT * FROM recharge WHERE phone = ? AND status = ?', [info[0].phone, 1]);
+        const [infos] = await connection.query('SELECT `invite`,`code` FROM users WHERE phone = ?', [info[0].phone]);
+
+        let bonus = 0;
+        let bonus2 = info[0].money * 0.02;
+        if (info[0].money > 99 && info[0].money <= 1000) {
+          bonus = info[0].money * 0.05;
+        } else {
+          bonus = info[0].money * 0.1;
+        }
+        if (Firstrecharge.length === 0) {
+
+          await connection.query('UPDATE users SET money = money + ?, total_money = total_money + ? WHERE phone = ?', [bonus, bonus, info[0].phone]);
+          const datasqll = 'INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, `time` = ?';
+          await connection.query(datasqll, [info[0].phone, "First deposit bonus", bonus, checkTime]);
+
+
+          // upline
+          let refferal = infos[0]?.invite;
+          console.log("reff", refferal)
+
+          if (refferal !== undefined) {
+
+            let [refferaluser] = await connection.query('SELECT * FROM users WHERE `code` = ? LIMIT 1', [refferal]);
+            if (refferaluser[0]?.phone) {
+              await connection.query('UPDATE users SET money = money + ?, total_money = total_money + ? WHERE phone = ?', [10, 10, refferaluser[0]?.phone]);
+              const datasqll = 'INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, `time` = ?';
+              await connection.query(datasqll, [refferaluser[0]?.phone, "Bonus", 10, checkTime]);
+            }
+          }
+
+        } else {
+          await connection.query('UPDATE users SET money = money + ?, total_money = total_money + ? WHERE phone = ?', [bonus, bonus, info[0].phone]);
+          // upline
+          let refferals = infos[0]?.invite;
+          if (refferals !== undefined) {
+            let [refferalusers] = await connection.query('SELECT * FROM users WHERE `code` = ? LIMIT 1', [refferals]);
+            if (refferalusers[0]?.phone) {
+
+              if (refferalusers[0]?.phone) {
+                await connection.query('UPDATE users SET money = money + ?, total_money = total_money + ? WHERE phone = ?', [bonus2, bonus2, refferalusers[0]?.phone]);
+
+                const datasqls = 'INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, `time` = ?';
+                await connection.query(datasqls, [refferalusers[0]?.phone, "Bonus", bonus2, checkTime]);
+              }
+            }
+          }
+        }
+
+        await connection.query('UPDATE recharge SET status = 1 WHERE id_order = ?', [order_id]);
+        await connection.query('UPDATE users SET money = money + ?, total_money = total_money + ?,totalRecharge=totalRecharge+? WHERE phone = ?', [info[0].money, info[0].money, info[0].money, info[0].phone]);
+
+        const datasqls = 'INSERT INTO transaction_history SET phone = ?, detail = ?, balance = ?, `time` = ?';
+        await connection.query(datasqls, [info[0].phone, "Deposit", info[0].money, checkTime]);
+
+
+        return res.json("success");
+
+      }
+    } else {
+      console.log('Transaction not found.');
+      return res.status(404).json({
+        message: "Transaction not found",
+        success: false,
+      });
+
+    }
+  } catch (error) {
+    console.log("error", error)
+    return res.status(500).json({
+      message: `Payment verification failed: ${error.message}`,
+      status: false,
+      error: error.message,
+      timeStamp: new Date().toISOString(),
+    });
+  }
+};
+
 
 
 const getHistoryFilter = async (req, res) => {
@@ -7525,7 +7748,7 @@ const getHistoryFilter = async (req, res) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "x-domain": "universals.pro",
+          "x-domain": "api-docs.space",
           "x-internal-request": "true",
         },
         withCredentials: true,
@@ -7545,29 +7768,29 @@ const getHistoryFilter = async (req, res) => {
 
     const externalSummary = Array.isArray(data.data)
       ? Object.values(
-          data.data.reduce((acc, item) => {
-            const gameType = item.game_type || "Other Games";
+        data.data.reduce((acc, item) => {
+          const gameType = item.game_type || "Other Games";
 
-            if (!acc[gameType]) {
-              acc[gameType] = {
-                game_type: gameType,
-                total_bets: 0,
-                total_bet_amount: 0,
-                total_win_amount: 0,
-              };
-            }
+          if (!acc[gameType]) {
+            acc[gameType] = {
+              game_type: gameType,
+              total_bets: 0,
+              total_bet_amount: 0,
+              total_win_amount: 0,
+            };
+          }
 
-            acc[gameType].total_bets += 1;
-            acc[gameType].total_bet_amount += Number(item.bet_amount) || 0;
-            acc[gameType].total_win_amount += Number(item.win_amount) || 0;
+          acc[gameType].total_bets += 1;
+          acc[gameType].total_bet_amount += Number(item.bet_amount) || 0;
+          acc[gameType].total_win_amount += Number(item.win_amount) || 0;
 
-            return acc;
-          }, {})
-        ).map((item) => ({
-          ...item,
-          total_bet_amount: Number(item.total_bet_amount).toFixed(2),
-          total_win_amount: Number(item.total_win_amount).toFixed(2),
-        }))
+          return acc;
+        }, {})
+      ).map((item) => ({
+        ...item,
+        total_bet_amount: Number(item.total_bet_amount).toFixed(2),
+        total_win_amount: Number(item.total_win_amount).toFixed(2),
+      }))
       : [];
 
     const finalSummary = [...externalSummary, lottery_summary];
@@ -7655,14 +7878,14 @@ module.exports = {
   getSpinData,
   claimSpin,
   redeemSpin,
-    spineHistory,
+  spineHistory,
   getdailyactivyreward,
-
   listRecharge2,
   addUSDT,
   addUpi,
   fetchPromotionDataUser,
   promotionNew,
   transactioncatgory,
-
+  verifyTrexoPayPayment,
+  initiateTrexoPayPayment,
 };

@@ -14,6 +14,7 @@ import CopyCopmponent from "../../components/CopyCopmponent";
 import {
   bannerGet,
   recharge,
+  TrexoPayment,
   zilpayRecharge,
 } from "../../store/reducer/userReducer";
 import { userDetail } from "../../store/reducer/authReducer";
@@ -40,19 +41,21 @@ export default function Recharge() {
   const [successMessage, setSuccessMessage] = useState("");
   const tabs = [
     { label: "UPI-QRpay", Icons: EWalletIcon, g: false },
-    { label: "Wake UP-APP", Icons: PaytmIcon, g: false },
     { label: "UPI-PayTM", Icons: UpiIcon, g: false },
+    { label: "Wake UP-APP", Icons: PaytmIcon, g: false },
     { label: "USDT", Icons: UsdtIcon, g: true },
     { label: "ARPay", Icons: AR, g: false },
   ];
 
   const handleSubmit = async () => {
-    const type = activeTab2;
+    // const type = activeTab2;
+    let type ;
     const formData = new FormData();
     formData.append("amount", amount);
-    formData.append("type", type);
+    // formData.append("type", type);
 
     if (activeTab === "UPI-QRpay") {
+      type= activeTab2;
       if (bannergetData?.chennal?.status1 == 1) {
         if (userInfo?.isdemo === 1) {
           dispatch(recharge(formData)).then((res) => {
@@ -67,27 +70,12 @@ export default function Recharge() {
             }, 3000);
           });
         } else if (amount > 99) {
-          dispatch(zilpayRecharge({ amount, type })).then((res) => {
-            setSuccessMessage(res.payload.message);
-            if (res.payload.status) {
-              setAlertsuccess(true);
-              // const urls=res.payload.data.url
-              window.location.href = res.payload.data.url;
-              //  window.open(urls, "_blank");
-            } else {
-              setAlerts(true);
-            }
-            setTimeout(() => {
-              setSuccessMessage("");
-            }, 3000);
-          });
-        }
-      } else {
-        dispatch(recharge(formData)).then((res) => {
+           dispatch(TrexoPayment({ amount, type, channel:101 })).then((res) => {
           setSuccessMessage(res.payload.message);
           if (res.payload.status) {
             setAlertsuccess(true);
-            navigate("/wallet/Recharge/pay");
+            // console.log("data",res.payload.payment_url)
+            window.location.href = res.payload.payment_url;
           } else {
             setAlerts(true);
           }
@@ -95,6 +83,33 @@ export default function Recharge() {
             setSuccessMessage("");
           }, 3000);
         });
+        }
+      } else {
+          dispatch(TrexoPayment({ amount, type, channel:101 })).then((res) => {
+          setSuccessMessage(res.payload.message);
+          if (res.payload.status) {
+            setAlertsuccess(true);
+            // console.log("data",res.payload.payment_url)
+            window.location.href = res.payload.payment_url;
+          } else {
+            setAlerts(true);
+          }
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 3000);
+        });
+        // dispatch(recharge(formData)).then((res) => {
+        //   setSuccessMessage(res.payload.message);
+        //   if (res.payload.status) {
+        //     setAlertsuccess(true);
+        //     navigate("/wallet/Recharge/pay");
+        //   } else {
+        //     setAlerts(true);
+        //   }
+        //   setTimeout(() => {
+        //     setSuccessMessage("");
+        //   }, 3000);
+        // });
       }
     } else if (activeTab === "Wake UP-APP") {
       if (bannergetData?.chennal?.status2 == 1) {
@@ -111,27 +126,27 @@ export default function Recharge() {
             }, 3000);
           });
         } else if (amount > 99) {
-          dispatch(zilpayRecharge({ amount, type })).then((res) => {
-            setSuccessMessage(res.payload.message);
-            if (res.payload.status) {
-              setAlertsuccess(true);
-              // const urls=res.payload.data.url
-              window.location.href = res.payload.data.url;
-              //  window.open(urls, "_blank");
-            } else {
-              setAlerts(true);
-            }
-            setTimeout(() => {
-              setSuccessMessage("");
-            }, 3000);
-          });
-        }
-      } else {
-        dispatch(recharge(formData)).then((res) => {
+          dispatch(TrexoPayment({ amount, type, channel:101 })).then((res) => {
           setSuccessMessage(res.payload.message);
           if (res.payload.status) {
             setAlertsuccess(true);
-            navigate("/wallet/Recharge/pay2");
+            // console.log("data",res.payload.payment_url)
+            window.location.href = res.payload.payment_url;
+          } else {
+            setAlerts(true);
+          }
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 3000);
+        });
+        }
+      } else {
+           dispatch(TrexoPayment({ amount, type, channel:101 })).then((res) => {
+          setSuccessMessage(res.payload.message);
+          if (res.payload.status) {
+            setAlertsuccess(true);
+            // console.log("data",res.payload.payment_url)
+            window.location.href = res.payload.payment_url;
           } else {
             setAlerts(true);
           }
@@ -140,6 +155,38 @@ export default function Recharge() {
           }, 3000);
         });
       }
+    } else if (activeTab === "USDT") {
+       type= "USDT";
+      if (bannergetData?.chennal?.status3 == 1) {
+        dispatch(TrexoPayment({ amount, type, channel:104 })).then((res) => {
+          setSuccessMessage(res.payload.message);
+          if (res.payload.status) {
+            setAlertsuccess(true);
+            // console.log("data",res.payload.data)
+            window.location.href = res.payload.payment_url;
+          } else {
+            setAlerts(true);
+          }
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 3000);
+        });
+      } else {
+        dispatch(TrexoPayment({ amount, type, channel:104 })).then((res) => {
+          setSuccessMessage(res.payload.message);
+          if (res.payload.status) {
+            setAlertsuccess(true);
+            // console.log("data",res.payload.data)
+            window.location.href = res.payload.payment_url;
+          } else {
+            setAlerts(true);
+          }
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 3000);
+        });
+      }
+   
     } else {
       if (bannergetData?.chennal?.status3 == 1) {
         if (userInfo?.isdemo === 1) {
@@ -155,27 +202,27 @@ export default function Recharge() {
             }, 3000);
           });
         } else if (amount > 99) {
-          dispatch(zilpayRecharge({ amount, type })).then((res) => {
-            setSuccessMessage(res.payload.message);
-            if (res.payload.status) {
-              setAlertsuccess(true);
-              // const urls=res.payload.data.url
-              window.location.href = res.payload.data.url;
-              //  window.open(urls, "_blank");
-            } else {
-              setAlerts(true);
-            }
-            setTimeout(() => {
-              setSuccessMessage("");
-            }, 3000);
-          });
-        }
-      } else {
-        dispatch(recharge(formData)).then((res) => {
+        dispatch(TrexoPayment({ amount, type, channel:101 })).then((res) => {
           setSuccessMessage(res.payload.message);
           if (res.payload.status) {
             setAlertsuccess(true);
-            navigate("/wallet/Recharge/pay3");
+            // console.log("data",res.payload.payment_url)
+            window.location.href = res.payload.payment_url;
+          } else {
+            setAlerts(true);
+          }
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 3000);
+        });
+        }
+      } else {
+           dispatch(TrexoPayment({ amount, type, channel:101 })).then((res) => {
+          setSuccessMessage(res.payload.message);
+          if (res.payload.status) {
+            setAlertsuccess(true);
+            // console.log("data",res.payload.payment_url)
+            window.location.href = res.payload.payment_url;
           } else {
             setAlerts(true);
           }
@@ -186,6 +233,9 @@ export default function Recharge() {
       }
     }
   };
+
+
+
   const handleSubmitUSDT = async () => {
     const type = "USDT";
     const formData = new FormData();
@@ -405,7 +455,8 @@ export default function Recharge() {
                       : "bg-gray-400 text-white"
                   }`}
                   disabled={loader ? true : false}
-                  onClick={handleSubmitUSDT}
+                  // onClick={}
+                  onClick={handleSubmit}
                 >
                   Deposit
                 </button>
@@ -547,8 +598,11 @@ const channels = [
     channelItem: [
       {
         label: "7Day-QRpay",
-        balance: "500 - 50K",
+        balance: "200 - 50K",
         depositAmount: [
+          {
+            am: 200,
+          },
           {
             am: 500,
           },
@@ -563,9 +617,6 @@ const channels = [
           },
           {
             am: 10000,
-          },
-          {
-            am: 50000,
           },
         ],
       },
@@ -599,8 +650,11 @@ const channels = [
       },
       {
         label: "FAST-QRpay",
-        balance: "500 - 50K",
+        balance: "200 - 50K",
         depositAmount: [
+          {
+            am: 200,
+          },
           {
             am: 500,
           },

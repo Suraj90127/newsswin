@@ -549,8 +549,8 @@ const Home = () => {
                   universals . To ensure you are on the legitimate universals website
                   (
                   <span>
-                    <Link className="text-blue-700" to="https://universals.pro">
-                      universals.pro
+                    <Link className="text-blue-700" to="https://sswin90.com">
+                      sswin90.com
                     </Link>
                   </span>
                   ) please verify authenticity through our official channels.

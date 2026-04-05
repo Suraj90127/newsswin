@@ -17,11 +17,11 @@ const TelegramPage = () => {
   const telegramLinks = [
     {
       name: "Official Telegram",
-      link: "https://t.me/UniversalGameIndiaOfficial",
+      link: "https://t.me/sswin90_support",
     },
     {
       name: "Teacher Telegram",
-      link: "https://t.me/OfficialGameAgent",
+      link: "https://t.me/boost/sswin90officialagent",
     },
     {
       name: "Bot",

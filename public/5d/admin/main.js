@@ -90,7 +90,7 @@ function connectsockets(checkID, host) {
 
 // Usage example
 const typeid1 = 5; // Change this based on your needs
-const host = "https://universals.pro";
+const host = "https://sswin90.com";
 const activeVoice = true; // or false, depending on your needs
 
 function cownDownTimer() {

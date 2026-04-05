@@ -4,11 +4,11 @@ import { log } from 'console';
 
 // const apiUrl = "https://zapcore.live/api";
 const apiUrl = "https://api-docs.space/api";
-const key = "JDFu4VFqXNi9L9H4lzCo";
+const key = "P18eCa60SONhiAazrFHG";
 
 const commonHeaders = {
   "Content-Type": "application/json",
-  "x-domain": "universals.pro",
+  "x-domain": "api-docs.space",
   "x-internal-request": "true",
 };
 
